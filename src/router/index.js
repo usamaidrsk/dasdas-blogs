@@ -6,7 +6,7 @@ import NotFound from "@/views/NotFound"
 const routes = [
     { path: '/',  redirect: { name: 'BlogsPage' } },
     { path: '/blogs', name: "BlogsPage", component: BlogsIndex },
-    { path: '/blogs/:id', name:"BlogDetails", component: BlogDetails },
+    { path: '/blogs/:slug', name:"BlogDetails", component: BlogDetails },
     { path: '/:pathMatch(.*)*', name: "NotFound", component: NotFound },
 ]
 

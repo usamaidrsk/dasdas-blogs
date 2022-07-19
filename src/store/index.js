@@ -25,4 +25,3 @@ export default createStore({
   }
 })
 
-// https://techcrunch.com/wp-json/wp/v2/posts
