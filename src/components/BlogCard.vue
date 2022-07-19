@@ -1,8 +1,8 @@
 <template>
   <router-link :to="`/blogs/${blog.id}`" style="text-decoration: none; color: unset">
     <div class="blog-card" :style="{ flexDirection: fullWidth ? 'row' : 'column'}">
-      <div class="blog-image-container">
-        <img :src="blog.jetpack_featured_media_url" :alt="blog.title.rendered">
+      <div class="blog-image-container" :style="{ height: fullWidth ? '45vh' : '31vh'}">
+        <img :src="blog.jetpack_featured_media_url" :alt="blog.title.rendered" :style="{ height: fullWidth ? '41vh' : '29vh'}">
       </div>
       <div class="blog-content-section">
         <p style="">
@@ -10,7 +10,7 @@
         </p>
         <h1 :class="[fullWidth ? 'large-text' : '', 'blog-tittle']">{{blog.title.rendered}}</h1>
         <div class="content-body" v-html="blog.excerpt.rendered" />
-        <div style="display: flex; flex-direction: row; justify-content: space-between">
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
           <p>3min read</p>
           <router-link :to="`/blogs/${blog.id}`" style="text-decoration: none">
             <button >

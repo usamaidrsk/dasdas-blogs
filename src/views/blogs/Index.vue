@@ -37,6 +37,7 @@ export default defineComponent({
     const loadMoreBlogs = async () => {
       const {data} = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
         if (data.length) {
+          // this is to remove duplicate blogs
           const blogs = [...new Map([...store.getters.getBlogs, ...data].map(blog => [blog.id, blog])).values()]
           store.commit("setBlogs", blogs)
         }
@@ -45,7 +46,7 @@ export default defineComponent({
     const handleScroll = () => {
       let element = blogsScrollComponent.value
       if (element.getBoundingClientRect().bottom < window.innerHeight) {
-        setTimeout(() => loadMoreBlogs(), 1000)
+        setTimeout(() => loadMoreBlogs(), 3000)
       }
     }
 

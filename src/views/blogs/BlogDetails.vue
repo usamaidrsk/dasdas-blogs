@@ -80,10 +80,6 @@ export default defineComponent({
     width: 80%;
     margin: 0 auto;
 
-    img {
-      width: 80% !important;
-    }
-
     .blog-tittle {
       font-style: normal;
       font-weight: 900;
@@ -126,6 +122,10 @@ export default defineComponent({
   .blog-details-container {
     width: 80vw;
     margin: 0 auto;
+
+    .blog-content-container {
+
+    }
 
     .blogs-list {
       display: grid;

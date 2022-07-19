@@ -1,21 +1,21 @@
 <template>
-  <nav>
-    <div class="navigation-section">
-      <router-link to="/">
-        <img src="./assets/logo.svg" class="logo" alt="app-logo">
-      </router-link>
-      <div class="social-media-icons">
-        <img src="./assets/icons/twitter.svg" alt="twitter-icon"> .
-        <img src="./assets/icons/dribble.svg" alt="dribble-icon"> .
-        <img src="./assets/icons/figma.svg" alt="figma-icon"> .
-        <img src="./assets/icons/github.svg" alt="github-icon">
+    <nav>
+      <div class="navigation-section">
+        <router-link to="/">
+          <img src="./assets/logo.svg" class="logo" alt="app-logo">
+        </router-link>
+        <div class="social-media-icons">
+          <img src="./assets/icons/twitter.svg" alt="twitter-icon"> .
+          <img src="./assets/icons/dribble.svg" alt="dribble-icon"> .
+          <img src="./assets/icons/figma.svg" alt="figma-icon"> .
+          <img src="./assets/icons/github.svg" alt="github-icon">
+        </div>
       </div>
+    </nav>
+    <div class="app-content-section">
+      <router-view></router-view>
+      <AppLoader/>
     </div>
-  </nav>
-  <div class="app-content-section">
-    <router-view></router-view>
-    <AppLoader/>
-  </div>
 </template>
 
 <script>
@@ -30,14 +30,12 @@ export default {
 </script>
 <style lang="scss">
 @import "./assets/styles/_variables.scss";
-body {
-  margin: 0;
-}
+
 #app {
   margin: 0;
-
+  overflow-x: hidden;
   nav {
-    width: 100%;
+    width: 99vw;
     background: #FFFFFF;
     position: fixed;
 
