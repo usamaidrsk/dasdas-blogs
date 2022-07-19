@@ -37,21 +37,22 @@ export default defineComponent({
     const loadMoreBlogs = async () => {
       const {data} = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
         if (data.length) {
-          store.commit("setBlogs", [...store.getters.getBlogs, ...data])
+          const blogs = [...new Map([...store.getters.getBlogs, ...data].map(blog => [blog.id, blog])).values()]
+          store.commit("setBlogs", blogs)
         }
     }
 
     const handleScroll = () => {
       let element = blogsScrollComponent.value
       if (element.getBoundingClientRect().bottom < window.innerHeight) {
-        setTimeout(() => loadMoreBlogs(), 3000)
+        setTimeout(() => loadMoreBlogs(), 1000)
       }
     }
 
     onMounted(async () => {
       try{
         store.commit('setLoading', true)
-        const { data} = await axios.get("https:blogs//techcrunch.com/wp-json/wp/v2/posts")
+        const { data} = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
         store.commit("setBlogs", data)
         store.commit('setLoading', false)
       } catch (e) {

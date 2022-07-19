@@ -97,7 +97,7 @@ export default defineComponent({
       font-size: 1.2em;
       color: #6E6E6E;
       width: 100%;
-      overflow-x: scroll;
+      overflow-x: auto;
       padding-bottom: 5em;
     }
   }
