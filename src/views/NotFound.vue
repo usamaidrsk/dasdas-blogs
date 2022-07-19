@@ -1,12 +1,12 @@
 <template>
-  <nav>
-    app navigation
-  </nav>
+  <div>
+    404 NOT FOUND
+  </div>
 </template>
 
 <script>
 export default {
-  name: "AppNavigation"
+  name: "NotFound"
 }
 </script>
 

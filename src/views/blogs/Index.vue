@@ -7,12 +7,16 @@
 
 <script>
 import BlogCard from "@/components/BlogCard";
-import AppFooter from "@/components/Footer";
+import AppFooter from "@/components/AppFooter";
+import { defineComponent } from "vue"
 
-export default {
+export default defineComponent({
   name: "BlogsIndex",
-  components: {AppFooter, BlogCard}
-}
+  components: {AppFooter, BlogCard},
+  setup() {
+
+  }
+})
 </script>
 
 <style scoped>
