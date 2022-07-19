@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import {defineComponent, ref} from 'vue'
+import {computed, defineComponent} from 'vue'
 import { useStore } from 'vuex'
 
 export default defineComponent({
@@ -15,7 +15,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     return {
-      loading: ref(store.getters.getLoading)
+      loading: computed(() => store.getters.getLoading)
     }
   }
 })
@@ -26,7 +26,8 @@ export default defineComponent({
   position: absolute;
   elevation: higher;
   display: flex;
-  height: 97vh;
+  width: 80vw;
+  height: 70vh;
 }
 
 .loading-spinner {

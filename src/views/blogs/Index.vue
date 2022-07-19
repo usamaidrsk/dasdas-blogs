@@ -1,8 +1,14 @@
 <template>
   <div class="blogs-index">
-    <div class="blogs-list">
-      <BlogCard v-for="(blog, index) in blogs" :full-width="index === 0" :blog="blog" :key="blog.slug"/>
-      <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+    <div class="blogs-list" v-if="blogs.length" ref="blogsScrollComponent">
+      <BlogCard
+          v-for="(blog, index) in blogs"
+          :class="index === 0 ? 'top-blog' : ''"
+          :full-width="index === 0"
+          :blog="blog"
+          :key="blog.id"
+      />
+<!--      <infinite-loading @infinite="infiniteHandler"></infinite-loading>-->
     </div>
     <footer>
       <h1>Join our Team of Writers</h1>
@@ -17,39 +23,50 @@
 
 <script>
 import BlogCard from "@/components/BlogCard";
-import {defineComponent, onMounted, ref} from "vue"
+import {defineComponent, onMounted, onUnmounted, computed, ref} from "vue"
 import { useStore } from "vuex"
 import axios from "axios"
-import InfiniteLoading from 'vue-infinite-loading';
 
 export default defineComponent({
   name: "BlogsIndex",
-  components: {BlogCard, InfiniteLoading},
+  components: {BlogCard},
   setup() {
     const store = useStore()
+    const blogsScrollComponent = ref(null)
+
+    const loadMoreBlogs = async () => {
+      const {data} = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
+        if (data.length) {
+          store.commit("setBlogs", [...store.getters.getBlogs, ...data])
+        }
+    }
+
+    const handleScroll = () => {
+      let element = blogsScrollComponent.value
+      if (element.getBoundingClientRect().bottom < window.innerHeight) {
+        setTimeout(() => loadMoreBlogs(), 3000)
+      }
+    }
+
     onMounted(async () => {
       try{
         store.commit('setLoading', true)
-        const { data} = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
-        console.log(data)
+        const { data} = await axios.get("https:blogs//techcrunch.com/wp-json/wp/v2/posts")
         store.commit("setBlogs", data)
         store.commit('setLoading', false)
       } catch (e) {
         store.commit('setLoading', false)
       }
+      window.addEventListener("scroll", handleScroll)
     })
+
+    onUnmounted(() => {
+      window.removeEventListener("scroll", handleScroll)
+    })
+
     return {
-      blogs: ref(store.getters.getBlogs),
-      infiniteHandler($state) {
-        axios.get("https://techcrunch.com/wp-json/wp/v2/posts", ).then(({ data }) => {
-          if (data.length) {
-            store.commit("setBlogs", [...this.blogs, ...data])
-            $state.loaded()
-          } else {
-            $state.complete()
-          }
-        })
-      },
+      blogs: computed(() => store.getters.getBlogs),
+      blogsScrollComponent
     }
   }
 })
@@ -61,8 +78,10 @@ export default defineComponent({
   flex-direction: column;
   min-height: 60vh;
 
-  .grid-blog-listing {
-
+  .blogs-list {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 5em;
   }
 
   footer {
@@ -70,6 +89,7 @@ export default defineComponent({
     font-family: 'SF Pro Display',serif;
     display: flex;
     flex-direction: column;
+    margin-bottom: 5em;
 
     h1 {
       font-style: normal;
@@ -97,6 +117,35 @@ export default defineComponent({
       width: 10em;
       background: #000000;
       align-self: center;
+    }
+  }
+}
+@media only screen and (max-width: 768px) {
+  .blogs-list {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 2em;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .blogs-list {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 3em;
+
+    .top-blog {
+      grid-column: 1 / span 2;
+    }
+  }
+}
+@media only screen and (min-width: 850px) {
+  .blogs-list {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 5em;
+
+    .top-blog {
+      grid-column: 1 / span 3;
     }
   }
 }
