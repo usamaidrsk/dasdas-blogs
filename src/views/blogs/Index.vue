@@ -33,13 +33,17 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const blogsScrollComponent = ref(null)
+    const page = ref(1)
+    const offset = ref(10)
 
     const loadMoreBlogs = async () => {
-      const {data} = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
+      const {data} = await axios.get(`https://techcrunch.com/wp-json/wp/v2/posts?page=${page.value}&offset=${offset.value}`)
         if (data.length) {
           // this is to remove duplicate blogs
           const blogs = [...new Map([...store.getters.getBlogs, ...data].map(blog => [blog.id, blog])).values()]
           store.commit("setBlogs", blogs)
+          page.value += 1
+          offset.value += 10
         }
     }
 
@@ -57,7 +61,7 @@ export default defineComponent({
     const handleScroll = () => {
       let element = blogsScrollComponent.value
       if (element.getBoundingClientRect().bottom < window.innerHeight) {
-        setTimeout(() => loadMoreBlogs(), 3000)
+        setTimeout(() => loadMoreBlogs(), 5000)
       }
     }
 
