@@ -5,10 +5,18 @@
           <img src="./assets/logo.svg" class="logo" alt="app-logo">
         </router-link>
         <div class="social-media-icons">
-          <img src="./assets/icons/twitter.svg" alt="twitter-icon"> .
-          <img src="./assets/icons/dribble.svg" alt="dribble-icon"> .
-          <img src="./assets/icons/figma.svg" alt="figma-icon"> .
-          <img src="./assets/icons/github.svg" alt="github-icon">
+          <a href="https://twitter.com">
+            <img src="./assets/icons/twitter.svg" alt="twitter-icon">
+          </a> .
+          <a href="https://dribbble.com/">
+            <img src="./assets/icons/dribble.svg" alt="dribble-icon">
+          </a> .
+          <a href="https://www.figma.com/">
+            <img src="./assets/icons/figma.svg" alt="figma-icon">
+          </a> .
+          <a href="https://github.com/">
+            <img src="./assets/icons/github.svg" alt="github-icon">
+          </a>
         </div>
       </div>
     </nav>
@@ -71,19 +79,22 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
-  #app-content-section {
+  .navigation-section {
+    padding: .4em 0;
+  }
+  .app-content-section {
     width: 98vw;
     margin: 0 auto;
   }
 }
 @media only screen and (min-width: 600px) {
-  #app-content-section {
+  .app-content-section {
     width: 95vw;
     margin: 0 auto;
   }
 }
 @media only screen and (min-width: 768px) {
-  #app-content-section {
+  .app-content-section {
     width: 80vw;
     margin: 0 auto;
   }

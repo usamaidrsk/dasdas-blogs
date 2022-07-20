@@ -16,7 +16,7 @@
         <p>On dasdas, writers earn a living doing what they love.</p>
         <p>Getting started is easy. Just pay a one time $25 fee and everything is ready to go.</p>
       </div>
-      <button type="button">JOIN US</button>
+      <button type="submit" @click="makePayment()">JOIN US</button>
     </footer>
   </div>
 </template>
@@ -26,6 +26,7 @@ import BlogCard from "@/components/BlogCard";
 import {defineComponent, onMounted, onUnmounted, computed, ref} from "vue"
 import { useStore } from "vuex"
 import axios from "axios"
+import {useFlutterwave} from "flutterwave-vue3"
 
 export default defineComponent({
   name: "BlogsIndex",
@@ -68,7 +69,33 @@ export default defineComponent({
 
     return {
       blogs: computed(() => store.getters.getBlogs),
-      blogsScrollComponent
+      blogsScrollComponent,
+      makePayment() {
+        useFlutterwave({
+          public_key: process.env.FLUTTER_WAVE_PUBLIC_KEY || "FLWPUBK_TEST-784bbb7dd2fb0d330aa489020a48a337-X",
+          tx_ref: Date.now(),
+          amount: 25,
+          currency: 'USD',
+          redirect_url: "https://dasdas-blogs.netlify.app",
+          payment_options: 'card, banktransfer, ussd',
+          customer: {
+            email: 'user@gmail.com',
+            phonenumber: '08102909304',
+            name: 'yemi desola'
+          },
+          callback: (data) => {
+            console.log(data)
+          },
+          onclose: () => {
+
+          },
+          customizations: {
+            title: 'dsasdas',
+            description: 'Payment to join us',
+            logo: 'https://dasdas-blogs.netlify.app/img/logo.a6b8f962.svg'
+          }
+        })
+      }
     }
   }
 })
@@ -119,6 +146,7 @@ export default defineComponent({
       width: 10em;
       background: #000000;
       align-self: center;
+      cursor: grab;
     }
   }
 }
