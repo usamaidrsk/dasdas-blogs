@@ -8,7 +8,6 @@
           :blog="blog"
           :key="blog.id"
       />
-<!--      <infinite-loading @infinite="infiniteHandler"></infinite-loading>-->
     </div>
     <footer>
       <h1>Join our Team of Writers</h1>
@@ -44,14 +43,7 @@ export default defineComponent({
         }
     }
 
-    const handleScroll = () => {
-      let element = blogsScrollComponent.value
-      if (element.getBoundingClientRect().bottom < window.innerHeight) {
-        setTimeout(() => loadMoreBlogs(), 3000)
-      }
-    }
-
-    onMounted(async () => {
+    const fetchBlogs = async () => {
       try{
         store.commit('setLoading', true)
         const { data} = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
@@ -60,6 +52,21 @@ export default defineComponent({
       } catch (e) {
         store.commit('setLoading', false)
       }
+    }
+
+    const handleScroll = () => {
+      let element = blogsScrollComponent.value
+      if (element.getBoundingClientRect().bottom < window.innerHeight) {
+        setTimeout(() => loadMoreBlogs(), 3000)
+      }
+    }
+
+    onMounted(async () => {
+      const cachedBlogs = JSON.parse(localStorage.getItem("blogs")) || []
+      if(cachedBlogs.length) {
+        store.commit("setBlogs", cachedBlogs)
+        setTimeout(() => fetchBlogs(), 1000)
+      } else await fetchBlogs()
       window.addEventListener("scroll", handleScroll)
     })
 
@@ -82,12 +89,6 @@ export default defineComponent({
             email: 'user@gmail.com',
             phonenumber: '08102909304',
             name: 'yemi desola'
-          },
-          callback: (data) => {
-            console.log(data)
-          },
-          onclose: () => {
-
           },
           customizations: {
             title: 'dsasdas',

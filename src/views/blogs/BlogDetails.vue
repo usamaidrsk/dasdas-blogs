@@ -1,11 +1,14 @@
 <template>
   <div class="blog-details-container">
-    <div class="blog-content-container">
+    <div class="blog-content-container" v-if="blogFetched">
       <p style=""><strong>{{ blogAuthor.name }}</strong> · {{createdAt}} hours ago</p>
       <h1 class="blog-tittle">{{blog.title.rendered}}</h1>
       <div class="content-body" v-html="blog.content.rendered" />
     </div>
-    <h1>More Articles</h1>
+    <div v-else style="text-align: center; font-weight: bolder; font-style: italic; font-size: 1.4em">
+      Oops! could not load blog details
+    </div>
+    <h1 v-if="blogs.length">More Articles</h1>
     <div class="blogs-list" v-if="blogs.length">
       <BlogCard v-for="blog in blogs.filter(blg => blg.id !== blog.id).slice(0, 3)" :blog="blog" :key="blog.id"/>
     </div>
@@ -25,6 +28,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const route = useRoute()
+    const blogFetched = ref(false)
     const blog = ref({ date: "", content: { rendered: ""}, title: { rendered: ""}, _links: {author: [] }})
     const blogAuthor = ref({ name: "" })
     const createdAt = computed(() => new Date(blog.value.date).getHours())
@@ -34,35 +38,39 @@ export default defineComponent({
         store.commit('setLoading', true)
         const { data} = await axios.get(`https://techcrunch.com/wp-json/wp/v2/posts/${route.params.id}`)
         blog.value = data
+        blogFetched.value = true
 
         const  authorResponse = await axios.get(blog.value._links.author[0].href)
         blogAuthor.value = authorResponse.data
 
-        if(!store.getters.getBlogs.length) {
-          const blogsResponse = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
-          store.commit("setBlogs", blogsResponse.data)
-        }
-
         store.commit('setLoading', false)
+        window.scrollTo(0,0);
       } catch (e) {
+        blogFetched.value = false
         store.commit('setLoading', false)
       }
     }
 
     watch(route, async () => {
       await fetchBlogDetails()
-      window.scrollTo(0,0);
     })
 
     onMounted(async () => {
       await fetchBlogDetails()
+      const cachedBlogs = JSON.parse(localStorage.getItem("blogs")) || []
+      if(cachedBlogs.length) store.commit("setBlogs", cachedBlogs)
+      else {
+        const blogsResponse = await axios.get("https://techcrunch.com/wp-json/wp/v2/posts")
+        store.commit("setBlogs", blogsResponse.data)
+      }
     })
 
     return {
       blogs: computed(() => store.getters.getBlogs),
       blog,
       blogAuthor,
-      createdAt
+      createdAt,
+      blogFetched
     }
   }
 })

@@ -18,6 +18,7 @@ export default createStore({
   mutations: {
     setBlogs(state, blogs) {
       state.blogs = blogs
+      localStorage.setItem("blogs", JSON.stringify(state.blogs))
     },
     setLoading(state, status) {
       state.loading = status
