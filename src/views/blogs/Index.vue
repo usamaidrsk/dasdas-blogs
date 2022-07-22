@@ -61,7 +61,7 @@ export default defineComponent({
     const handleScroll = () => {
       let element = blogsScrollComponent.value
       if (element.getBoundingClientRect().bottom < window.innerHeight) {
-        setTimeout(() => loadMoreBlogs(), 5000)
+        setTimeout(() => loadMoreBlogs(), 3000)
       }
     }
 
@@ -69,7 +69,8 @@ export default defineComponent({
       const cachedBlogs = JSON.parse(localStorage.getItem("blogs")) || []
       if(cachedBlogs.length) {
         store.commit("setBlogs", cachedBlogs)
-        setTimeout(() => fetchBlogs(), 1000)
+        // fetch new blogs after 3 seconds
+        setTimeout(() => fetchBlogs(), 3000)
       } else await fetchBlogs()
       window.addEventListener("scroll", handleScroll)
     })
