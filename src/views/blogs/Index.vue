@@ -69,8 +69,6 @@ export default defineComponent({
       const cachedBlogs = JSON.parse(localStorage.getItem("blogs")) || []
       if(cachedBlogs.length) {
         store.commit("setBlogs", cachedBlogs)
-        // fetch new blogs after 3 seconds
-        setTimeout(() => fetchBlogs(), 3000)
       } else await fetchBlogs()
       window.addEventListener("scroll", handleScroll)
     })
